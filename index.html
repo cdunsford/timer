@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div>↻</div>
+    <script>
+        const spinner = document.querySelector('div');
+        let rotateCount = 0;
+        let startTime = null;
+        let rAF;
+
+        function draw(timestamp) {
+            if (!startTime) {
+                startTime = timestamp;
+            }
+
+            rotateCount = (timestamp - startTime) / 3;
+
+            if (rotateCount > 359) {
+                rotateCount %= 360;
+            }
+            spinner.style.transform = `rotate(${rotateCount}deg)`;
+
+            rAF = requestAnimationFrame(draw);
+
+        }
+
+        draw();
+
+        const bodyElement = document.querySelector('body');
+        bodyElement.addEventListener('click', ()=>{
+            if(rotateCount > 0){
+                cancelAnimationFrame(rAF);
+                rotateCount = 0;
+            }
+            else{
+                draw();
+            }
+            
+        },false);
+
+    </script>
+</body>
+</html>
