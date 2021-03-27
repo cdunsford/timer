@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Simple setInterval clock</title>
+    <style>
+      p {
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="clock" >00:00:00</p>
+    <button class="start-button" id="start-button" onclick="toggleTimer(this)">Start</button>
+    <button class="stop-button" id="stop-button" onclick="toggleTimer(this)">Stop</button>
+    <button class="reset-button" id="reset-button" onclick="toggleTimer(this)">Reset</button>
+    <script>
+
+        let counter = 0;
+        let createClock = null;
+        let startTime = 0;
+
+        function millisToMinutesAndSeconds(millis) {
+
+            var hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+            hours = hours == 0 ? '00' : hours;
+            var minutes = Math.floor(millis / 60000);
+            
+            if(minutes == 0){
+                minutes = '00';
+            }
+            else if(minutes <= 9)
+            {
+                minutes = "0" + minutes;
+            }
+            //minutes = minutes == 0 ? '00' : minutes;
+            var seconds = ((millis % 60000) / 1000).toFixed(0);
+            return hours + ":" + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+        }
+
+      function displayTime() {
+        /* let date = new Date();
+        let time = date.toLocaleTimeString(); */
+     
+        counter = Date.now() - startTime;
+        counter = millisToMinutesAndSeconds(counter);
+/*         if(counter >= 10)
+        {
+            document.querySelector('.clock').textContent = counter;
+        }
+        else
+        {
+            document.querySelector('.clock').textContent = counter;
+
+        } */
+        document.querySelector('.clock').textContent = counter;
+        
+        //counter++;
+        
+      }
+
+      //displayTime();
+      //let createClock = setInterval(displayTime, 1000);
+
+      function toggleTimer(elem){
+        if(elem.id === "start-button"){
+            startTime = Date.now();
+
+            elem.disabled = true;
+            createClock = setInterval(displayTime, 1000);
+
+        }
+        else if(elem.id === "stop-button"){
+            clearInterval(createClock);
+            createClock = null;
+            document.getElementById("start-button").disabled = false;
+        }
+        else if(elem.id === "reset-button"){
+            counter = 0;
+            document.querySelector('.clock').textContent = "00:00:00";
+        }
+
+
+
+      }
+    </script>
+  </body>
+</html>
